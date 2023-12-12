@@ -59,6 +59,24 @@ class ProductoModel():
             return affected_rows
         except Exception as ex:
             raise Exception(ex)
+        
+    # Método update_producto modificado en ProductoModel
+    @classmethod
+    def update_producto_patch(cls, producto):
+        try:
+            connection = get_connection()
+
+            with connection.cursor() as cursor:
+                cursor.execute("""UPDATE producto SET nombre = %s, categoria = %s, descripcion = %s, imagen = %s, precio = %s, stock = %s
+                                WHERE id = %s""",
+                            (producto['nombre'], producto['categoria'], producto['descripcion'], producto['imagen'], producto['precio'], producto['stock'], producto['id']))
+                affected_rows = cursor.rowcount
+                connection.commit()
+
+            connection.close()
+            return affected_rows
+        except Exception as ex:
+            raise Exception(ex)
     
     #Agregar productos
     @classmethod

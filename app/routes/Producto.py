@@ -125,7 +125,6 @@ def update_productoquery():
 
     
     
-    
 #Eliminar un produto
 @main.route('/productos/delete/<id>', methods=['DELETE'])
 def delete_producto(id):
@@ -142,3 +141,40 @@ def delete_producto(id):
     except Exception as ex:
         return jsonify({'message': str(ex)}), 500
 
+
+
+# Actualizar parcialmente un producto
+@main.route('/productos/update_partial/<id>', methods=['PATCH'])
+def update_producto_partial(id):
+    try:
+        producto_data = request.json
+        producto = ProductoModel.get_producto(id)
+        print(producto_data)
+        print('/n')
+        print(producto)
+        if producto is None:
+            return jsonify({'message': "Producto no encontrado"}), 404
+
+        # Aquí actualizamos solo los campos que se proporcionan en la solicitud PATCH
+        if 'nombre' in producto_data:
+            producto['nombre'] = producto_data['nombre']
+        if 'categoria' in producto_data:
+            producto['categoria'] = producto_data['categoria']
+        if 'descripcion' in producto_data:
+            producto['descripcion'] = producto_data['descripcion']
+        if 'imagen' in producto_data:
+            producto['imagen'] = producto_data['imagen']
+        if 'precio' in producto_data:
+            producto['precio'] = int(producto_data['precio'])
+        if 'stock' in producto_data:
+            producto['stock'] = int(producto_data['stock'])
+
+        affected_rows = ProductoModel.update_producto_patch(producto)
+
+        if affected_rows == 1:
+            return jsonify({'message': "Producto actualizado parcialmente"}), 200
+        else:
+            return jsonify({'message': "No se actualizó el producto"}), 500
+
+    except Exception as ex:
+        return jsonify({'message': str(ex)}), 500
