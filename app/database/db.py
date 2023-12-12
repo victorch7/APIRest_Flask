@@ -18,4 +18,4 @@ def get_connection():
     except mysql.connector.Error as e:
         logging.error(f"Error en la base de datos: {e}")
         return e
-        # return render_template('500.html'), 500
+

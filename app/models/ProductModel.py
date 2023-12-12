@@ -10,7 +10,7 @@ class ProductoModel():
             productos = []
 
             with connection.cursor() as cursor:
-                cursor.execute("SELECT id, nombre, categoria, descripcion, imagen, precio, stock FROM producto ORDER BY nombre ASC")
+                cursor.execute("SELECT id, nombre, categoria, descripcion, imagen, precio, stock FROM producto")
                 resultset = cursor.fetchall()
 
                 for row in resultset:
@@ -66,8 +66,8 @@ class ProductoModel():
         try:
             connection = get_connection()
             with connection.cursor() as cursor:
-                cursor.execute("""INSERT INTO producto (id, nombre, categoria, descripcion, imagen, precio, stock) 
-                                VALUES (%s, %s, %s, %s, %s, %s, %s)""", (producto.id, producto.nombre, producto.categoria, producto.descripcion, producto.imagen, producto.precio, producto.stock))
+                cursor.execute("""INSERT INTO producto (nombre, categoria, descripcion, imagen, precio, stock) 
+                                VALUES (%s, %s, %s, %s, %s, %s)""", (producto.nombre, producto.categoria, producto.descripcion, producto.imagen, producto.precio, producto.stock))
                 affected_rows = cursor.rowcount #Cuantas filas se afectaron
                 connection.commit()
             connection.close()
